@@ -10,10 +10,10 @@ class server_host:
         self.clients=[]
     def bind(self):
         self.server.bind(self.ADDR)
-    def handle_clients(self,conn,addr,disconnect_msg='!DISCONNECT'):
+    def handle_client(self,conn,addr,disconnect_msg='!DISCONNECT'):
         connection=True
         while connection:
-            msg_length = conn.recv(self.HEADER).decode(self.format)
+            msg_length = conn.recv(self.header).decode(self.format)
             if msg_length:
                 msg_length=int(msg_length)
                 msg = conn.recv(msg_length).decode(self.format)
@@ -29,7 +29,8 @@ class server_host:
                     print(f"[{addr}] {msg}")
                     for i in range(len(self.clients)):
                         if self.clients[i][1] != addr:
-                            self.clients[i][0].send(msg.encode())
+                            sent=addr[0]+"/"+str(addr[1]) + ": " + msg
+                            self.clients[i][0].send(sent.encode())
         conn.close()
     def start(self):
         self.server.listen()
@@ -39,8 +40,11 @@ class server_host:
             thread = threading.Thread(target=self.handle_client,args=(conn,addr))
             thread.start()
             print(f"[AVTIVE CONNECTIOSN] {threading.activeCount() -1}")
+            for i in range(len(self.clients)):
+                join_msg=f'[{addr[0]}/{addr[1]}] has joined the server!'
+                self.clients[i][0].send(join_msg.encode(self.format))
             self.clients.append((conn,addr))
-            
+
 class client_socket:
     def __init__(self,ADDR,HEADER=64,FORMAT='utf-8'):
         self.ADDR=ADDR
@@ -48,6 +52,7 @@ class client_socket:
         self.format=FORMAT
         self.client=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         
+        # self.
     def connect(self):
         try:
             self.client.connect(self.ADDR)
@@ -59,9 +64,6 @@ class client_socket:
         send_length=str(msg_length).encode(self.format)
         send_length+=b' ' * (self.header-len(send_length))
         self.client.send(send_length)
-        self.client.send(msg)
+        self.client.send(message)
     def read(self):
-        msg=self.client.recv(self.header).decode(self.format)
-        if msg:
-            print(msg)
-        
+        return self.client.recv(self.header).decode(self.format)
