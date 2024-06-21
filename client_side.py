@@ -1,6 +1,8 @@
 from messager import client_socket
 import threading
-client = client_socket(("192.168.0.150",5050))
+SERVER='123.456.789'
+PORT=1234
+client = client_socket((SERVER,PORT))
 client.connect()
 
 run=True
