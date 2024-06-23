@@ -2,7 +2,7 @@ import socket
 import threading
 
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-PORT=5050
+PORT=1234
 SERVER=socket.gethostbyname(socket.gethostname())
 ADDR=(SERVER,PORT)
 server.bind(ADDR)
