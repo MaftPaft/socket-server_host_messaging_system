@@ -68,7 +68,7 @@ class text_box:
         pg.draw.rect(window,(0,0,0),pg.rect.Rect(self.x+txt.get_width(),self.y+self.height-(self.height/1.1),10,self.height/1.2))
         window.blit(txt,(self.x,self.y))
 client=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-client.connect(('192.168.1.127', 5050))
+client.connect(('123.456.789.0', 1234))
 
 log=[]
 def reciever():
