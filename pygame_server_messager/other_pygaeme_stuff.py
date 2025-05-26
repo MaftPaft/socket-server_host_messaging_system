@@ -3,7 +3,7 @@ import socket
 import threading
 from random import randint
 
-haddr=('192.168.0.150',5050)
+haddr=('',5050)
 addr=[haddr[0]]
 client=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 client.connect(haddr)
